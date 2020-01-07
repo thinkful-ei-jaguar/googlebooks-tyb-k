@@ -8,3 +8,7 @@ main {
     justify-content: flex-start;
     align-items: center;
 }
+
+ul {
+    list-style: none;
+}

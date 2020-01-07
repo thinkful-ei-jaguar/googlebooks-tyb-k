@@ -8,28 +8,34 @@ class Main extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            kind: "",
-            totalItems: 0,
-            items: [
-                {
-                    volumeInfo: {
-                        title: "",
-                        authors: [],
-                        description: ""    
-                    },
-                    saleInfo: {
-                        listPrice: {
-                            amount: 0,
-                        }
-                    }
-                }
-            ]
+            books: [],
+            error: null,
+            loading: false
         }
     }
 
     submitSearch = (e) => {
         e.preventDefault();
-        console.log("Oh look a search!");
+        const baseUrl='https://www.googleapis.com/books/v1/volumes?q=';
+        const searchUrl= `${baseUrl}${e.target.searchTerm.value}`
+        this.setState({loading: true});
+        fetch(searchUrl)
+            .then(res => res.ok ? res.json(): Promise.reject('Something went wrong'))
+            .then(items => {
+                this.setState({
+                books: items.items,
+                loading: false
+            })}
+            )
+            .catch(error => {
+                this.setState({
+                error: error,
+                loading: false
+                })
+            })
+            
+            
+
     }
 
     render () {
@@ -37,10 +43,15 @@ class Main extends Component {
             <Search 
                 submitSearch={this.submitSearch}
             />
-            <Filter />
-            <Results 
-                books={this.state.items}
+            <Filter 
             />
+            <ul>
+                <Results 
+                    books={this.state.books}
+                    error={this.state.error}
+                    loading={this.state.loading}
+                />
+            </ul>
         </main>)
     }
 }

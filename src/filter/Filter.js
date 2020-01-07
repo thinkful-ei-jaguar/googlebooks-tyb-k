@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Filter () {
-    return <p>Hello this'll be the filters!</p>
+    return <p>hello</p>
 }
 
 export default Filter
